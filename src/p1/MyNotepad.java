@@ -61,6 +61,7 @@ public class MyNotepad extends JFrame{
 	public static void main(String[] args){
 		//this is a new line in git
 		//another line in git
+		//another line in child branch
 		createGUI();
 	}
 }
