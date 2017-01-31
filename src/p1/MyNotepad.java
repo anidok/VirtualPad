@@ -2,6 +2,7 @@ package p1;
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Insets;
@@ -10,26 +11,30 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.JToolBar;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 @SuppressWarnings("serial")
 public class MyNotepad extends JFrame{
 	
 	
-	protected JTextArea textArea;		//can't keep private as it is going to get referenced in non-sub classes.
+	protected JTextPane textPane;		//can't keep private as it is going to get referenced in non-sub classes.
 	protected File FilePath;		//used to store path of opened file
 	protected boolean FILE_OPENED = false;
 	protected Font font = (new Font("Serif" , Font.PLAIN  , 14));
+	protected Color fontcolor = Color.BLACK;
 	
 	public MyNotepad(String title){
 		super(title);
 		Container contentPane = getContentPane();
 		//setLayout(new BorderLayout());
-		textArea = new JTextArea();
-		textArea.setMargin(new Insets(5,5,5,5));
-		textArea.setEditable(true);
-		JScrollPane scrollPane = new JScrollPane(textArea); 
+		textPane = new JTextPane();
+		textPane.setMargin(new Insets(5,5,5,5));
+		textPane.setEditable(true);
+		JScrollPane scrollPane = new JScrollPane(textPane); 
 		//add(scrollPane, BorderLayout.CENTER);
 		contentPane.add(scrollPane , BorderLayout.CENTER);
 		
@@ -52,10 +57,25 @@ public class MyNotepad extends JFrame{
 		//************Setting Focus to text area when window is opened*********
 		frame.addWindowListener( new WindowAdapter() {
 		    public void windowOpened( WindowEvent e ){
-		        frame.textArea.requestFocus();
+		        frame.textPane.requestFocus();
 		    }
 		});
 		frame.setVisible(true);
+	}
+	
+	//Method to set the font of JTextPane
+	public static void setJTextPaneFont(JTextPane textPane , Font font , Color c){
+		MutableAttributeSet attrs = textPane.getInputAttributes();
+		StyleConstants.setFontFamily(attrs , font.getFamily());
+		StyleConstants.setFontSize(attrs , font.getSize());
+		StyleConstants.setBold(attrs, (font.getStyle() & Font.BOLD)!= 0);
+		StyleConstants.setItalic(attrs, (font.getStyle() & Font.ITALIC)!= 0);
+		StyleConstants.setForeground(attrs, c);
+		
+		//setting attributs to current doc 
+		StyledDocument doc = textPane.getStyledDocument();
+		doc.setCharacterAttributes(doc.getLength(), 5, attrs, false);
+		
 	}
 	
 	public static void main(String[] args){

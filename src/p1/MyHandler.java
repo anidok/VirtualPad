@@ -12,12 +12,15 @@ import java.util.Scanner;
 
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
+import javax.swing.JTextPane;
 
 public class MyHandler implements ActionListener {
 	MyNotepad frame;
+	JTextPane textPane;
 	
 	public MyHandler(MyNotepad frame){
 		this.frame = frame;
+		this.textPane = frame.textPane;
 	}
 	
 	public void actionPerformed(ActionEvent e){
@@ -28,7 +31,7 @@ public class MyHandler implements ActionListener {
 			
 			//******************Handling New operation********************
 			if(menuItem.getText().equals("New")){
-				frame.textArea.setText("");
+				frame.textPane.setText("");
 				frame.setTitle("Untitled - Virtualpad");
 				frame.FILE_OPENED = false;
 			}
@@ -56,8 +59,9 @@ public class MyHandler implements ActionListener {
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
-		             frame.textArea.setText(text);
+				 }
+					
+		             frame.textPane.setText(text);
 		             frame.setTitle(file.getName());
 		             frame.FILE_OPENED = true;
 		             frame.FilePath = file;
@@ -68,7 +72,7 @@ public class MyHandler implements ActionListener {
 			if(menuItem.getText().equals("Save As...")){
 				JFileChooser fc = new JFileChooser();
 				 int returnVal = fc.showSaveDialog(frame);
-				 String str = frame.textArea.getText();
+				 String str = frame.textPane.getText();
 				 String line = null;
 				 Scanner sc = new Scanner(str);
 				 
@@ -97,7 +101,7 @@ public class MyHandler implements ActionListener {
 					}
 				}
 				
-				frame.textArea.setText("");
+				frame.textPane.setText("");
 				frame.setTitle("Untitled - Virtualpad");
 				frame.FILE_OPENED = false;
 				//notePad.textArea.append(file.getName() + "\n");
@@ -107,7 +111,7 @@ public class MyHandler implements ActionListener {
 			
 			//******************Handling Save operation*******************
 			if(menuItem.getText().equals("Save")){
-				String str = frame.textArea.getText();
+				String str = frame.textPane.getText();
 			    String line = null;
 				Scanner sc = new Scanner(str);
 				
