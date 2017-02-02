@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JTextPane;
 import javax.swing.text.MutableAttributeSet;
@@ -27,7 +28,7 @@ public class MyToolbarHandler {
 		if(e.getSource() instanceof JButton){
 			JButton button = (JButton)e.getSource();
 			
-			if(button.getText().equals("B")){				
+			if(button.getActionCommand().equals("Bold")){				
 				if(!button.isSelected()){
 					Font f = frame.font.deriveFont(frame.font.getStyle() | Font.BOLD);										
 					setJTextPaneFont(textPane, f, frame.fontcolor);
@@ -35,7 +36,7 @@ public class MyToolbarHandler {
 					button.setSelected(true);
 					int r=137, g=152, b=198;
 					Color color = new Color(r,g,b);
-					button.setBackground(color);	
+					button.setBackground(color);					
 				}
 				
 				else{					
@@ -54,7 +55,7 @@ public class MyToolbarHandler {
 			}
 			
 			
-			else if(button.getText().equals("I")){				
+			else if(button.getActionCommand().equals("Italic")){				
 				if(!button.isSelected()){
 					Font f = frame.font.deriveFont(frame.font.getStyle() | Font.ITALIC);
 					// ^ operator is used to toggle style. i.e, ITALIC/NON-ITALIC
@@ -80,6 +81,13 @@ public class MyToolbarHandler {
 				//transfer focus back to text area after button is pressed.
 				textPane.requestFocus();
 				
+			}
+			
+			else if(button.getActionCommand().equals("Color")){
+				Color color = JColorChooser.showDialog(frame, "Select a new color...", Color.WHITE);
+				setJTextPaneFont(textPane, frame.font, color);
+				frame.fontcolor = color;
+				textPane.requestFocus();
 			}
 		}
 		
@@ -120,8 +128,7 @@ public class MyToolbarHandler {
 		StyledDocument doc = textPane.getStyledDocument();
 		int start = textPane.getSelectionStart();
 		int end = textPane.getSelectionEnd();
-		doc.setCharacterAttributes(start, (end-start+1), attrs, false);
-		//doc.setCharacterAttributes(doc.getLength(), 1 , attrs, false);
+		doc.setCharacterAttributes(start, (end-start), attrs, false);
 			
 	}
 	

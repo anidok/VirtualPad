@@ -13,6 +13,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.EditorKit;
@@ -21,6 +22,15 @@ import javax.swing.text.rtf.RTFEditorKit;
 public class MyHandler implements ActionListener {
 	MyNotepad frame;
 	JTextPane textPane;
+	final String aboutText=
+			"<html><big>VirtualPad</big><hr>"
+			+"<p align=left>IDE used - Eclipse - Mars.2 Release (4.5.2)"
+			+"<p align=left>Environment - JavaSE-1.8"
+			+"<hr><hr><br><p align=left><bold>VirtualPad</bold> is a formatted text editor which supports both<br>"
+			+"RTF and plain text files. You can make changes using the<br>"
+			+"tools provided and impose the changes to the current file<br>"
+			+"or create a new one."
+			+"<hr><p align=right><big>Created by - Aniket</big><hr><html>";
 	
 	public MyHandler(MyNotepad frame){
 		this.frame = frame;
@@ -45,14 +55,20 @@ public class MyHandler implements ActionListener {
 			}
 			
 			//******************Handling Open operation*******************
-			if(menuItem.getText().equals("Open File..."))
+			else if(menuItem.getText().equals("Open File..."))
 			{
 				JFileChooser fc = new JFileChooser();
+				fc.addChoosableFileFilter(new filter1());
+				fc.addChoosableFileFilter(new filter2());
+				fc.addChoosableFileFilter(new filter3());
 				int returnVal = fc.showOpenDialog(frame);
 				
 				 if (returnVal == JFileChooser.APPROVE_OPTION) {
 					 File file = fc.getSelectedFile();
 					 //This is where a real application would open the file.
+					 fc.addChoosableFileFilter(new filter1());
+					 fc.addChoosableFileFilter(new filter2());
+					 fc.addChoosableFileFilter(new filter3());
 					 textPane.setText("");
 					 
 		             
@@ -76,17 +92,23 @@ public class MyHandler implements ActionListener {
 		    }
 				
 			 //******************Handling Save As operation*******************
-			 if(menuItem.getText().equals("Save As..."))
+			else if(menuItem.getText().equals("Save As..."))
 			 {
 				 boolean FILE_SAVED = false;		//used to store status of file saving.
 				 do
 				 {
 					 JFileChooser fc = new JFileChooser();
+					 fc.addChoosableFileFilter(new filter1());
+					 fc.addChoosableFileFilter(new filter2());
+				 	 fc.addChoosableFileFilter(new filter3());	 
 					 int returnVal = fc.showSaveDialog(frame);				 
 				 
 					 if (returnVal == JFileChooser.APPROVE_OPTION)		//if clicked on save button					 
 					 {
 						 File file = fc.getSelectedFile();
+						 fc.addChoosableFileFilter(new filter1());
+						 fc.addChoosableFileFilter(new filter2());
+						 fc.addChoosableFileFilter(new filter3());
 						 
 						 if(frame.getTitle().endsWith(".txt") | frame.getTitle().startsWith("Untitled") | frame.getTitle().endsWith(".java"))
 							//checking source file extension
@@ -136,7 +158,7 @@ public class MyHandler implements ActionListener {
 			
 			
 			 //******************Handling Save operation*******************
-			 if(menuItem.getText().equals("Save"))
+			else if(menuItem.getText().equals("Save"))
 			 {
 				 if(frame.getTitle().startsWith("Untitled"))
 				 {
@@ -144,11 +166,17 @@ public class MyHandler implements ActionListener {
 					 do
 					 {
 						 JFileChooser fc = new JFileChooser();
+						 fc.addChoosableFileFilter(new filter1());
+						 fc.addChoosableFileFilter(new filter2());
+						 fc.addChoosableFileFilter(new filter3());
 						 int returnVal = fc.showSaveDialog(frame);
 						 
 						 if (returnVal == JFileChooser.APPROVE_OPTION)
 						 {
 							 File file = fc.getSelectedFile();
+							 fc.addChoosableFileFilter(new filter1());
+							 fc.addChoosableFileFilter(new filter2());
+							 fc.addChoosableFileFilter(new filter3());
 							 
 							 if(file.getName().endsWith(".rtf"))	//if file is to be saved in rtf.
 							 {
@@ -183,12 +211,24 @@ public class MyHandler implements ActionListener {
 					 saveRTF(frame.OpenedFilePath);
 				 	
 			 }
+			 
+			 //*****************Handling Exit Action***********************
+			else if(menuItem.getText().equals("Exit"))
+			 {
+				 System.exit(0);
+			 }
+			
+			//*******************About VirtualPad**************************
+			else if(menuItem.getText().equals("About VirtualPad"))
+			{
+				JOptionPane.showMessageDialog(frame ,aboutText,"About VirtualPad",JOptionPane.INFORMATION_MESSAGE);
+			}
 		}	
 		
 		/*checking if event is generated from a toolbar item
 		Handling action events generated from a toolbar item in a separate class(MyToolbarHandler),
 		thus passing the  object of current ActionEvent 'e' and frame object in the handler class' constructor.*/	
-		else if (e.getActionCommand().equals("A toolbar button"))
+		else if (e.getActionCommand().equals("Bold") | e.getActionCommand().equals("Italic") | e.getActionCommand().equals("Color"))
 		{		
 			MyToolbarHandler toolbarHandler = new MyToolbarHandler(frame, e);
 			toolbarHandler.actionHandler();		//invoking the method which is going to handle the event.
@@ -256,6 +296,52 @@ public class MyHandler implements ActionListener {
 		}	
 	}
 	
+	
+	 class filter1 extends FileFilter {
+		public boolean accept(File fileobj){
+			String extension = "";
+			if(fileobj.getPath().lastIndexOf('.')>0)
+				extension = fileobj.getPath().substring(fileobj.getPath().lastIndexOf('.') + 1).toLowerCase();
+			if(extension != "")
+				return extension.equals("rtf");
+			else
+				return fileobj.isDirectory();
+		}
+		public String getDescription(){
+			return "RTF Text Format (RTF) (*.rtf)";
+		}		
+	}	
+
+	 class filter2 extends FileFilter {
+		public boolean accept(File fileobj){
+			String extension = "";
+			if(fileobj.getPath().lastIndexOf('.')>0)
+				extension = fileobj.getPath().substring(fileobj.getPath().lastIndexOf('.') + 1).toLowerCase();
+			if(extension != "")
+				return extension.equals("txt");
+			else
+				return fileobj.isDirectory();
+		}
+		public String getDescription(){
+			return "Text Document (*.txt)";
+		}		
+	}
+	 
+	 class filter3 extends FileFilter {
+		public boolean accept(File fileobj){
+			String extension = "";
+			if(fileobj.getPath().lastIndexOf('.')>0)
+				extension = fileobj.getPath().substring(fileobj.getPath().lastIndexOf('.') + 1).toLowerCase();
+			if(extension != "")
+				return extension.equals("java");
+			else
+				return fileobj.isDirectory();
+		}
+		public String getDescription(){
+			return "Java Document (*.java)";
+		}		
+	}
+	 
 }
 	
 
