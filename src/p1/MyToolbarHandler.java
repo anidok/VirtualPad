@@ -8,6 +8,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextPane;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class MyToolbarHandler {
 	MyNotepad frame;
@@ -27,19 +30,18 @@ public class MyToolbarHandler {
 			if(button.getText().equals("B")){				
 				if(!button.isSelected()){
 					Font f = frame.font.deriveFont(frame.font.getStyle() | Font.BOLD);										
-					MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+					setJTextPaneFont(textPane, f, frame.fontcolor);
 					frame.font = f;
 					button.setSelected(true);
 					int r=137, g=152, b=198;
 					Color color = new Color(r,g,b);
 					button.setBackground(color);	
-					System.out.println("bold toolbar");
 				}
 				
 				else{					
 					Font f = frame.font.deriveFont(frame.font.getStyle() &  ~Font.BOLD);
 					// ^ operator is used to toggle style. i.e, BOLD/UNBOLD
-					MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+					setJTextPaneFont(textPane, f, frame.fontcolor);
 					frame.font = f;
 					button.setSelected(false);
 					int r=249, g= 247, b=244;
@@ -56,7 +58,7 @@ public class MyToolbarHandler {
 				if(!button.isSelected()){
 					Font f = frame.font.deriveFont(frame.font.getStyle() | Font.ITALIC);
 					// ^ operator is used to toggle style. i.e, ITALIC/NON-ITALIC
-					MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+					setJTextPaneFont(textPane, f, frame.fontcolor);
 					frame.font = f;
 					button.setSelected(true);
 					int r=137, g=152, b=198;
@@ -67,7 +69,7 @@ public class MyToolbarHandler {
 				else{					
 					Font f = frame.font.deriveFont(frame.font.getStyle() &  ~Font.ITALIC);
 					// ^ operator is used to toggle style. i.e, ITALIC/NON-ITALIC
-					MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+					setJTextPaneFont(textPane, f, frame.fontcolor);
 					frame.font = f;
 					button.setSelected(false);
 					int r=249, g= 247, b=244;
@@ -90,19 +92,38 @@ public class MyToolbarHandler {
 			if(jcombobox.getName().equals("Size")){
 				int size = Integer.parseInt(item);
 				Font f = frame.font.deriveFont((float)size);
-				MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+				setJTextPaneFont(textPane, f, frame.fontcolor);
 				frame.font = f;
 				textPane.requestFocus();				
 			}
 			
 			else if(jcombobox.getName().equals("Family")){
 				Font f = new Font(item , frame.font.getStyle() , frame.font.getSize());
-				MyNotepad.setJTextPaneFont(textPane, f, frame.fontcolor);
+				setJTextPaneFont(textPane, f, frame.fontcolor);
 				frame.font = f;
 				textPane.requestFocus();
 			}
 			
 		}
 	}
+	
+	//Method to set the font of JTextPane
+	private static void setJTextPaneFont(JTextPane textPane , Font font , Color c){
+		MutableAttributeSet attrs = textPane.getInputAttributes();
+		StyleConstants.setFontFamily(attrs , font.getFamily());
+		StyleConstants.setFontSize(attrs , font.getSize());
+		StyleConstants.setBold(attrs, (font.getStyle() & Font.BOLD)!= 0);
+		StyleConstants.setItalic(attrs, (font.getStyle() & Font.ITALIC)!= 0);
+		StyleConstants.setForeground(attrs, c);
+		
+		//setting attribute to current doc (Start index , length , attribute set , boolean)
+		StyledDocument doc = textPane.getStyledDocument();
+		int start = textPane.getSelectionStart();
+		int end = textPane.getSelectionEnd();
+		doc.setCharacterAttributes(start, (end-start+1), attrs, false);
+		//doc.setCharacterAttributes(doc.getLength(), 1 , attrs, false);
+			
+	}
+	
 
 }

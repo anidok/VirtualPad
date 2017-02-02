@@ -13,16 +13,14 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
+
 
 @SuppressWarnings("serial")
 public class MyNotepad extends JFrame{
 	
 	
 	protected JTextPane textPane;		//can't keep private as it is going to get referenced in non-sub classes.
-	protected File FilePath;		//used to store path of opened file
+	protected File OpenedFilePath;		//used to store path of opened file
 	protected boolean FILE_OPENED = false;
 	protected Font font = (new Font("Serif" , Font.PLAIN  , 14));
 	protected Color fontcolor = Color.BLACK;
@@ -30,11 +28,14 @@ public class MyNotepad extends JFrame{
 	public MyNotepad(String title){
 		super(title);
 		Container contentPane = getContentPane();
-		//setLayout(new BorderLayout());
+		
+		//create an instance of RTFEditorKit for rtf support
+		//RTFEditorKit rtf = new RTFEditorKit();
 		textPane = new JTextPane();
+		//textPane.setEditorKit( rtf ); 
 		textPane.setMargin(new Insets(5,5,5,5));
-		textPane.setEditable(true);
-		JScrollPane scrollPane = new JScrollPane(textPane); 
+		textPane.setEditable(true);		
+		JScrollPane scrollPane = new JScrollPane(textPane);
 		//add(scrollPane, BorderLayout.CENTER);
 		contentPane.add(scrollPane , BorderLayout.CENTER);
 		
@@ -61,23 +62,9 @@ public class MyNotepad extends JFrame{
 		    }
 		});
 		frame.setVisible(true);
-	}
+	}	
 	
-	//Method to set the font of JTextPane
-	public static void setJTextPaneFont(JTextPane textPane , Font font , Color c){
-		MutableAttributeSet attrs = textPane.getInputAttributes();
-		StyleConstants.setFontFamily(attrs , font.getFamily());
-		StyleConstants.setFontSize(attrs , font.getSize());
-		StyleConstants.setBold(attrs, (font.getStyle() & Font.BOLD)!= 0);
-		StyleConstants.setItalic(attrs, (font.getStyle() & Font.ITALIC)!= 0);
-		StyleConstants.setForeground(attrs, c);
-		
-		//setting attributs to current doc 
-		StyledDocument doc = textPane.getStyledDocument();
-		doc.setCharacterAttributes(doc.getLength(), 5, attrs, false);
-		
-	}
-	
+	/*****************MAIN METHOD***********************/
 	public static void main(String[] args){
 		//this is a new line in git
 		//another line in git

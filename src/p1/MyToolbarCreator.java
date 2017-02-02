@@ -32,7 +32,6 @@ public class MyToolbarCreator {
 		toolbarButton.setSelected(false);
 		int r=249, g= 247, b=244;
 		Color color = new Color(r,g,b);
-		toolbarButton.setBackground(color);
 		toolbarButton.setActionCommand("A toolbar button");
 		//button.setSize(new Dimension(d.width , d.height+6));
 		MyHandler handler = new MyHandler(frame);
