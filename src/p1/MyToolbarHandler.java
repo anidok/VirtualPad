@@ -28,7 +28,7 @@ public class MyToolbarHandler {
 		if(e.getSource() instanceof JButton){
 			JButton button = (JButton)e.getSource();
 			
-			if(button.getActionCommand().equals("Bold")){				
+			if(button.getActionCommand().equals("Bold")){
 				if(!button.isSelected()){
 					Font f = frame.font.deriveFont(frame.font.getStyle() | Font.BOLD);										
 					setJTextPaneFont(textPane, f, frame.fontcolor);
@@ -44,6 +44,30 @@ public class MyToolbarHandler {
 					// ^ operator is used to toggle style. i.e, BOLD/UNBOLD
 					setJTextPaneFont(textPane, f, frame.fontcolor);
 					frame.font = f;
+					button.setSelected(false);
+					int r=249, g= 247, b=244;
+					Color color = new Color(r,g,b);
+					button.setBackground(color);
+										
+				}
+				//transfer focus back to text area after button is pressed.
+				textPane.requestFocus();
+			}
+			
+			
+			else if(button.getActionCommand().equals("Underline")){	
+				if(!button.isSelected()){										
+					frame.IS_UNDERLINED = true;
+					setJTextPaneUnderline(frame);
+					button.setSelected(true);
+					int r=137, g=152, b=198;
+					Color color = new Color(r,g,b);
+					button.setBackground(color);					
+				}
+				
+				else{					
+					frame.IS_UNDERLINED = false;
+					setJTextPaneUnderline(frame);
 					button.setSelected(false);
 					int r=249, g= 247, b=244;
 					Color color = new Color(r,g,b);
@@ -116,7 +140,9 @@ public class MyToolbarHandler {
 	}
 	
 	//Method to set the font of JTextPane
-	private static void setJTextPaneFont(JTextPane textPane , Font font , Color c){
+	/*Note that this function is declared static. Thats why any object that needs to get referred must be passed into
+	 into the function as arguement as static reference cannot be made to non-static field i.e, textPane */
+	private static void setJTextPaneFont(JTextPane textPane, Font font , Color c){
 		MutableAttributeSet attrs = textPane.getInputAttributes();
 		StyleConstants.setFontFamily(attrs , font.getFamily());
 		StyleConstants.setFontSize(attrs , font.getSize());
@@ -130,6 +156,15 @@ public class MyToolbarHandler {
 		int end = textPane.getSelectionEnd();
 		doc.setCharacterAttributes(start, (end-start), attrs, false);
 			
+	}
+	
+	private static void setJTextPaneUnderline(MyNotepad frame){
+		MutableAttributeSet attrs = frame.textPane.getInputAttributes();
+		StyleConstants.setUnderline(attrs, frame.IS_UNDERLINED);
+		StyledDocument doc = frame.textPane.getStyledDocument();
+		int start = frame.textPane.getSelectionStart();
+		int end = frame.textPane.getSelectionEnd();
+		doc.setCharacterAttributes(start, (end-start), attrs, false);
 	}
 	
 

@@ -24,6 +24,7 @@ public class MyNotepad extends JFrame{
 	protected boolean FILE_OPENED = false;
 	protected Font font = (new Font("Serif" , Font.PLAIN  , 14));
 	protected Color fontcolor = Color.BLACK;
+	protected boolean IS_UNDERLINED = false;
 	
 	public MyNotepad(String title){
 		super(title);

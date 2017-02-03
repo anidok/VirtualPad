@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,7 +25,29 @@ public class MyToolbarCreator {
 		Dimension d = jtoolbar.getPreferredSize();
 		jtoolbar.setMinimumSize(d);
 		jtoolbar.setMaximumSize(d);
-		jtoolbar.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY , 1));		
+		jtoolbar.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY , 1));	
+		
+		JButton b1 = new JButton(new ImageIcon("images\\new.png"));
+		JButton b2 = new JButton(new ImageIcon("images\\open.png"));
+		JButton b3 = new JButton(new ImageIcon("images\\Save.png"));
+		b1.setActionCommand("New");
+		b2.setActionCommand("Open");
+		b3.setActionCommand("Save");
+		b1.setToolTipText("New(CTRL+N)");
+		b2.setToolTipText("Open Document(CTRL+O)");
+		b3.setToolTipText("Save(CTRL+S)");
+		
+		MyHandler handler = new MyHandler(frame);
+		b1.addActionListener(handler);
+		b2.addActionListener(handler);
+		b3.addActionListener(handler);
+		jtoolbar.add(b1);
+		jtoolbar.addSeparator(new Dimension(1,1));		
+		jtoolbar.add(b2);
+		jtoolbar.addSeparator(new Dimension(1,1));
+		jtoolbar.add(b3);
+		jtoolbar.addSeparator(new Dimension(1,1));
+		
 
 		//Creating Comboboxes
 		String [] size = {"8" , "9" , "10" , "11"  ,"12" , "14" , "16" , "18" ,
@@ -55,12 +76,12 @@ public class MyToolbarCreator {
 		d.height += 6;
 		c2.setMaximumSize(d);
 		
-		MyHandler handler = new MyHandler(frame);
-		
 		c1.addActionListener(handler);
 		c2.addActionListener(handler);
 		c1.setActionCommand("A toolbar combobox");
 		c2.setActionCommand("A toolbar combobox");
+		c1.setToolTipText("Font family");
+		c2.setToolTipText("Font size");
 		c1.setName("Family");
 		c2.setName("Size");
 		//setting name to combobox for later identification purpose
@@ -69,32 +90,42 @@ public class MyToolbarCreator {
 		c1.setSelectedItem("Serif");
 		c2.setSelectedItem("14");
 		
-		//adding an invisible strut(object)of specified width at the start of toolbar so as to shift the components by right.
-		jtoolbar.add(Box.createHorizontalStrut(70));
+		jtoolbar.addSeparator();
 		jtoolbar.add(c1);
 		jtoolbar.addSeparator(new Dimension(1,1));		
 		jtoolbar.add(c2);
 		jtoolbar.addSeparator(new Dimension(1,1));
 		
 		//Creating buttons
-		JButton b1 = new JButton(new ImageIcon("images\\bold.gif"));
-		JButton b2 = new JButton(new ImageIcon("images\\italic.gif"));
-		JButton b3 = new JButton(new ImageIcon("images\\color.png"));
+		b1 = new JButton(new ImageIcon("images\\bold.png"));
+		b2 = new JButton(new ImageIcon("images\\italic.png"));
+		b3 = new JButton(new ImageIcon("images\\underline.png"));
+		JButton b4 = new JButton(new ImageIcon("images\\fontcolor.png"));
 		b1.setSelected(false);
 		b2.setSelected(false);
+		b3.setSelected(false);
 		b1.setActionCommand("Bold");
 		b2.setActionCommand("Italic");
-		b3.setActionCommand("Color");
+		b3.setActionCommand("Underline");
+		b1.setToolTipText("Bold(ALT+B)");
+		b2.setToolTipText("Italic(ALT+I)");
+		b3.setToolTipText("Underline(ALT+U)");
+		b4.setToolTipText("Font color");
+		b4.setActionCommand("Color");
 		b1.addActionListener(handler);
 		b2.addActionListener(handler);
 		b3.addActionListener(handler);
+		b4.addActionListener(handler);
 		jtoolbar.add(b1);
 		jtoolbar.addSeparator(new Dimension(1,1));		
 		jtoolbar.add(b2);
-		jtoolbar.addSeparator(new Dimension(1,1));		
+		jtoolbar.addSeparator(new Dimension(1,1));
 		jtoolbar.add(b3);
+		jtoolbar.addSeparator(new Dimension(1,1));
+		jtoolbar.add(b4);
 		b1.setMnemonic(KeyEvent.VK_B);
 		b2.setMnemonic(KeyEvent.VK_I);
+		b2.setMnemonic(KeyEvent.VK_U);
 				
 				
 		jtoolbar.setFloatable(false);
